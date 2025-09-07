@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
 import { Mail, MessageSquare, User, Eye, EyeOff, Lock, Loader2 } from "lucide-react";
 
-import AuthImagePattern from "../components/AuthImagePattern";
+// import AuthImagePattern from "../components/AuthImagePattern";
 import toast from "react-hot-toast";
 
 const SignUpPage = () => {
@@ -42,8 +42,8 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="min-h-screen grid lg:grid-cols-2">
-      <div className="flex flex-col justify-center items-center p-6 sm:p-12">
+    <div className="min-h-screen flex items-center justify-center mt-7">
+      <div className="flex flex-col justify-center items-center p-6 sm:p-12 w-full max-w-md">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center mb-8">
             <div className="flex flex-col items-center gap-2 group">
@@ -173,10 +173,10 @@ const SignUpPage = () => {
         </div>
       </div>
 
-      <AuthImagePattern
+      {/* <AuthImagePattern
         title="Join our community"
         subtitle="Connect with friends, share moments, and stay in touch with loved ones"
-      />
+      /> */}
     </div>
   );
 };
