@@ -7,17 +7,28 @@ import { useAuthStore } from "../store/useAuthStore";
 const Sidebar = () => {
   const { getUsers, users, selectedUser, setSelectedUser, isUserLoading } =
     useChatStore();
-  // const onlineUsers = [];
-  const { onlineUsers} = useAuthStore();
+  const { onlineUsers } = useAuthStore();
 
   const [showOnlineOnly, setShowOnlineOnly] = useState(false);
+
   useEffect(() => {
     getUsers();
   }, [getUsers]);
 
   if (isUserLoading) return <SidebarSkeleton />;
+
+  // optional debug logs (keep outside JSX)
+  console.log("Users:", users);
+  console.log("Selected user:", selectedUser);
+
+  // optionally filter users if "show online only" is toggled
+  const displayedUsers = showOnlineOnly
+    ? users.filter((u) => onlineUsers.includes(u._id))
+    : users;
+
   return (
     <aside className="h-full w-20 lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200">
+      {/* Header */}
       <div className="border-b border-base-300 w-full p-5">
         <div className="flex items-center gap-2">
           <Users className="size-6" />
@@ -33,30 +44,30 @@ const Sidebar = () => {
             />
             <span className="text-sm">Show online only</span>
           </label>
-          <span className="text-xs text-zinc-500">({onlineUsers.length - 1} online)</span>
+          <span className="text-xs text-zinc-500">
+            ({Math.max(0, onlineUsers.length - 1)} online)
+          </span>
         </div>
       </div>
+
+      {/* User list */}
       <div className="overflow-y-auto w-full py-3">
-        {users.map((user) => (
+        {displayedUsers.map((user) => (
           <button
             key={user._id}
-            {...console.log(user)}
             onClick={() => setSelectedUser(user)}
-            {...console.log(selectedUser)}
-            className={`
-              w-full p-3 flex items-center gap-3
-              hover:bg-base-300 transition-colors
+            className={`w-full p-3 flex items-center gap-3 hover:bg-base-300 transition-colors
               ${
                 selectedUser?._id === user._id
                   ? "bg-base-300 ring-1 ring-base-300"
                   : ""
-              }
-            `}
+              }`}
           >
+            {/* Avatar */}
             <div className="relative mx-auto lg:mx-0">
               <img
                 src={user.profilePic || "/avatar.png"}
-                alt={user.name}
+                alt={`${user.firstName} ${user.lastName}`}
                 className="size-12 object-cover rounded-full"
               />
               {onlineUsers.includes(user._id) && (
@@ -67,15 +78,22 @@ const Sidebar = () => {
               )}
             </div>
 
-            {/* User info - only visible on larger screens */}
+            {/* User info */}
             <div className="hidden lg:block text-left min-w-0">
-              <div className="font-medium truncate">{user.firstName} {user.lastName}</div>
+              <div className="font-medium truncate">
+                {user.firstName} {user.lastName}
+              </div>
               <div className="text-sm text-zinc-400">
                 {onlineUsers.includes(user._id) ? "Online" : "Offline"}
               </div>
             </div>
           </button>
         ))}
+        {displayedUsers.length === 0 && (
+          <div className="p-4 text-center text-zinc-500">
+             No online users
+          </div> 
+        )}
       </div>
     </aside>
   );

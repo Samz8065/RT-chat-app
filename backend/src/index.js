@@ -5,14 +5,15 @@ import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.route.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { app,server } from "./lib/socket.js";
+import { app, server } from "./lib/socket.js";
 
 dotenv.config();
 // const app = express();
 
 const PORT = process.env.PORT;
 
-app.use(express.json({limit:'50mb'}));
+app.use(express.json({ limit: "5mb" }));
+app.use(express.urlencoded({ limit: "5mb", extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
