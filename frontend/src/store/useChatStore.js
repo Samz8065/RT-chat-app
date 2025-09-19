@@ -53,11 +53,29 @@ export const useChatStore = create((set, get) => ({
     if (!selectedUser) return;
 
     const socket = useAuthStore.getState().socket;
+    if (!socket) return;
+
+    // Remove any existing listeners first
+    socket.off("newMessage");
 
     socket.on("newMessage", (newMessage) => {
-      const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
-      if (!isMessageSentFromSelectedUser) return;
-      set({ messages: [...get().messages, newMessage] });
+      const { selectedUser: currentSelectedUser, messages } = get();
+      
+      // Handle both populated and non-populated senderId
+      const senderId = typeof newMessage.senderId === 'object' ? newMessage.senderId._id : newMessage.senderId;
+      const receiverId = typeof newMessage.receiverId === 'object' ? newMessage.receiverId._id : newMessage.receiverId;
+      
+      // Only add message if it's for the currently selected user (either sent by or received by)
+      if (currentSelectedUser && 
+          (senderId === currentSelectedUser._id || 
+           receiverId === currentSelectedUser._id)) {
+        
+        // Check if message already exists to prevent duplicates
+        const messageExists = messages.some(msg => msg._id === newMessage._id);
+        if (!messageExists) {
+          set({ messages: [...messages, newMessage] });
+        }
+      }
     });
   },
 
@@ -66,5 +84,7 @@ export const useChatStore = create((set, get) => ({
     socket.off("newMessage");
   },
 
-  setSelectedUser: (selectedUser) => set({ selectedUser }),
+  setSelectedUser: (selectedUser) => {
+    set({ selectedUser, messages: [] });
+  },
 }));

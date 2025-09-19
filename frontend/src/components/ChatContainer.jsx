@@ -20,14 +20,15 @@ const ChatContainer = () => {
   const messageEndRef = useRef(null);
 
   useEffect(() => {
-    getMessages(selectedUser._id);
-
-    subscribeToMessages();
+    if (selectedUser?._id) {
+      getMessages(selectedUser._id);
+      subscribeToMessages();
+    }
 
     return () => {
       unSubscribeFromMessages();
     };
-  }, [selectedUser, getMessages, subscribeToMessages, unSubscribeFromMessages]);
+  }, [selectedUser?._id]); // Only depend on selectedUser._id
 
   useEffect(() => {
     if (messageEndRef.current && messages) {
