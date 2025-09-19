@@ -43,6 +43,7 @@ export const signup = async (req, res) => {
       lastName: newUser.lastName,
       email: newUser.email,
       profilePic: newUser.profilePic,
+      createdAt: newUser.createdAt,
     });
   } catch (error) {
     console.error("Error in signup:", error.message);
@@ -71,6 +72,7 @@ export const login = async (req, res) => {
       lastName: user.lastName,
       email: user.email,
       profilePic: user.profilePic,
+      createdAt: user.createdAt,
     });
   } catch (error) {
     console.log("error in login credentials", error.message);
@@ -134,8 +136,8 @@ export const updateProfile = async (req, res) => {
 
 export const checkAuth = (req, res) => {
   try {
-    const { _id, firstName, lastName, email, profilePic } = req.user;
-    res.status(200).json({ _id, firstName, lastName, email, profilePic });
+    const { _id, firstName, lastName, email, profilePic, createdAt } = req.user;
+    res.status(200).json({ _id, firstName, lastName, email, profilePic, createdAt });
   } catch (error) {
     console.log("error in checkAuth controller", error.message);
     res.status(500).json({ message: "Internal server error" });

@@ -1,7 +1,14 @@
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
-import { Mail, MessageSquare, User, Eye, EyeOff, Lock, Loader2 } from "lucide-react";
+import {
+  Mail,
+  User,
+  Eye,
+  EyeOff,
+  Lock,
+  Loader2,
+} from "lucide-react";
 
 // import AuthImagePattern from "../components/AuthImagePattern";
 import toast from "react-hot-toast";
@@ -47,8 +54,12 @@ const SignUpPage = () => {
         <div className="w-full max-w-md space-y-8">
           <div className="text-center mb-8">
             <div className="flex flex-col items-center gap-2 group">
-              <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                <MessageSquare className="size-6 text-primary" />
+              <div className="w-16 h-16 rounded-lg flex items-center justify-center">
+                <img
+                  src="/Cryptalk_logo.png"
+                  alt="logo"
+                  className="w-14 h-14"
+                />
               </div>
               <h1 className="text-2xl font-bold mt-2">Create account</h1>
               <p className="text-base-content/60">

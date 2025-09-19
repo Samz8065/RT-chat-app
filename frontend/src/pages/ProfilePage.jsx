@@ -1,4 +1,3 @@
-import React from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useState } from "react";
 import { Camera, Mail, User } from "lucide-react";
@@ -34,12 +33,7 @@ const ProfilePage = () => {
           <div className="flex flex-col items-center gap-4">
             <div className="relative">
               <img
-                src={
-                  selectedImg ||
-                  authUser.profilePic ||
-                  "/avatar.png" ||
-                  "frontendpublicavatar.png"
-                }
+                src={selectedImg || authUser.profilePic || "/avatar.png"}
                 alt="Profile"
                 className="size-32 rounded-full object-cover border-4 "
               />
@@ -109,7 +103,13 @@ const ProfilePage = () => {
             <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between py-2 border-b border-zinc-700">
                 <span>Member Since</span>
-                <span>{authUser.createdAt?.split("T")[0]}</span>
+                {console.log({ authUser })}
+
+                <span>
+                  {authUser?.createdAt
+                    ? new Date(authUser.createdAt).toLocaleDateString("en-GB")
+                    : "N/A"}
+                </span>
               </div>
               <div className="flex items-center justify-between py-2">
                 <span>Account Status</span>
