@@ -28,7 +28,12 @@ const ChatContainer = () => {
     return () => {
       unSubscribeFromMessages();
     };
-  }, [selectedUser?._id]); // Only depend on selectedUser._id
+  }, [
+    getMessages,
+    selectedUser._id,
+    subscribeToMessages,
+    unSubscribeFromMessages,
+  ]); // Only depend on selectedUser._id
 
   useEffect(() => {
     if (messageEndRef.current && messages) {
@@ -51,7 +56,10 @@ const ChatContainer = () => {
       <div className="flex-1 overflow-auto p-4 space-y-4">
         {messages.map((message) => {
           // Handle both populated and non-populated senderId
-          const senderId = typeof message.senderId === 'object' ? message.senderId._id : message.senderId;
+          const senderId =
+            typeof message.senderId === "object"
+              ? message.senderId._id
+              : message.senderId;
           const isOwnMessage = authUser && senderId === authUser._id;
           return (
             <div
@@ -59,34 +67,36 @@ const ChatContainer = () => {
               className={`chat ${isOwnMessage ? "chat-end" : "chat-start"}`}
               ref={messageEndRef}
             >
-            <div className="chat-image avatar">
-              <div className="size-10 rounded-full border">
-                <img
-                  src={
-                    isOwnMessage
-                      ? authUser.profilePic || "/avatar.png"
-                      : (typeof message.senderId === 'object' ? message.senderId.profilePic : selectedUser.profilePic) || "/avatar.png"
-                  }
-                  alt="profile pic"
-                />
+              <div className="chat-image avatar">
+                <div className="size-10 rounded-full border">
+                  <img
+                    src={
+                      isOwnMessage
+                        ? authUser.profilePic || "/avatar.png"
+                        : (typeof message.senderId === "object"
+                            ? message.senderId.profilePic
+                            : selectedUser.profilePic) || "/avatar.png"
+                    }
+                    alt="profile pic"
+                  />
+                </div>
+              </div>
+              <div className="chat-header mb-1">
+                <time className="text-xs opacity-50 ml-1">
+                  {formatMessageTime(message.createdAt)}
+                </time>
+              </div>
+              <div className="chat-bubble flex flex-col">
+                {message.image && (
+                  <img
+                    src={message.image}
+                    alt="Attachment"
+                    className="sm:max-w-[200px] rounded-md mb-2"
+                  />
+                )}
+                {message.text && <p>{message.text}</p>}
               </div>
             </div>
-            <div className="chat-header mb-1">
-              <time className="text-xs opacity-50 ml-1">
-                {formatMessageTime(message.createdAt)}
-              </time>
-            </div>
-            <div className="chat-bubble flex flex-col">
-              {message.image && (
-                <img
-                  src={message.image}
-                  alt="Attachment"
-                  className="sm:max-w-[200px] rounded-md mb-2"
-                />
-              )}
-              {message.text && <p>{message.text}</p>}
-            </div>
-          </div>
           );
         })}
       </div>
